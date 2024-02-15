@@ -1,20 +1,39 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:ipo_app/core/app_export.dart';
-import 'package:ipo_app/presentation/login_otp_screen/models/login_otp_model.dart';
 
-/// A provider class for the LoginOtpScreen.
-///
-/// This provider manages the state of the LoginOtpScreen, including the
-/// current loginOtpModelObj
-
-// ignore_for_file: must_be_immutable
 class LoginOtpProvider extends ChangeNotifier {
   TextEditingController otpController = TextEditingController();
 
-  LoginOtpModel loginOtpModelObj = LoginOtpModel();
+  Future<bool> verifyOTP(String phoneNumber, String otp) async {
+    try {
+      var url = Uri.parse('https://your-django-api-endpoint.com/verify_otp/');
+      var response = await http.post(
+        url,
+        body: {
+          'phone_number': phoneNumber,
+          'otp': otp,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // OTP verification successful
+        var data = jsonDecode(response.body);
+        return data['verified'];
+      } else {
+        // OTP verification failed
+        return false;
+      }
+    } catch (error) {
+      // Handle network errors or other exceptions
+      print('Error verifying OTP: $error');
+      return false;
+    }
+  }
 
   @override
   void dispose() {
+    otpController.dispose();
     super.dispose();
   }
 }
