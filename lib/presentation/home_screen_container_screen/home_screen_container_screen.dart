@@ -55,9 +55,9 @@ class HomeScreenContainerScreenState extends State<HomeScreenContainerScreen> {
       case BottomBarEnum.Home:
         return AppRoutes.homeScreenTabContainerPage;
       case BottomBarEnum.Task:
-        return "/";
+        return "/task_screen";
       case BottomBarEnum.Profile:
-        return "/";
+        return "/profile_screen";
       default:
         return "/";
     }
